@@ -1,19 +1,19 @@
-// include/ast.hpp
 #pragma once
 #include <string>
 #include <memory>
+#include <llvm/IR/Value.h>
 
 class ASTExpr {
 public:
     virtual ~ASTExpr() = default;
-    virtual void codegen() = 0;
+    virtual llvm::Value* codegen() = 0;
 };
 
 class ASTInt : public ASTExpr {
 public:
     int value;
     ASTInt(int v) : value(v) {}
-    void codegen() override;
+    llvm::Value* codegen() override;
 };
 
 class ASTAdd : public ASTExpr {
@@ -21,7 +21,7 @@ public:
     ASTExpr* left;
     ASTExpr* right;
     ASTAdd(ASTExpr* l, ASTExpr* r) : left(l), right(r) {}
-    void codegen() override;
+    llvm::Value* codegen() override;
 };
 
 class ASTMethod {
@@ -43,5 +43,5 @@ class ASTProgram {
 public:
     ASTClass* mainClass;
     ASTProgram(ASTClass* c) : mainClass(c) {}
-    void codegen();
+    void codegen(); // still void because it prints the module
 };
